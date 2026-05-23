@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx create-next-app@latest *)",
+      "Bash(npm run *)",
+      "Bash(node *)",
+      "Bash(grep -n \"Relation\\\\$1\\\\|PostgrestQueryBuilder\\\\|from\\(\" /Users/jadenwang/BetterMe/node_modules/@supabase/postgrest-js/dist/index.d.mts)",
+      "Bash(grep -n \"class PostgrestQueryBuilder\\\\|Relation\\\\$1 =\" /Users/jadenwang/BetterMe/node_modules/@supabase/postgrest-js/dist/index.d.mts)",
+      "Bash(git init *)",
+      "Bash(git add *)"
+    ]
+  }
+}

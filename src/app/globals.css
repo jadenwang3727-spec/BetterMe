@@ -1,0 +1,383 @@
+@import "tailwindcss";
+
+/* ============================================================
+   PIXEL FONTS
+   ============================================================ */
+@font-face {
+  font-family: 'Press Start 2P';
+  src: url('/fonts/PressStart2P-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'VT323';
+  src: url('/fonts/VT323-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ============================================================
+   TAILWIND V4 DESIGN TOKENS
+   ============================================================ */
+@theme {
+  --font-pixel: 'Press Start 2P', 'Courier New', monospace;
+  --font-retro: 'VT323', 'Courier New', monospace;
+  --font-body: var(--font-inter, system-ui, sans-serif);
+
+  /* Dark pixel palette */
+  --color-bg-deep: #0a0a0f;
+  --color-bg-dark: #0f0f1a;
+  --color-bg-card: #13131f;
+  --color-bg-hover: #1a1a2e;
+  --color-border: #2a2a4a;
+  --color-border-bright: #3a3a6a;
+
+  /* Neon accents */
+  --color-neon-green: #39ff14;
+  --color-neon-blue: #00d4ff;
+  --color-neon-purple: #bf5fff;
+  --color-neon-pink: #ff2d92;
+  --color-neon-yellow: #ffe000;
+  --color-neon-orange: #ff7c2a;
+
+  /* Game colors */
+  --color-xp: #ffd700;
+  --color-xp-glow: #ffaa00;
+  --color-health: #ff4444;
+  --color-mana: #4488ff;
+  --color-streak: #ff6b35;
+
+  /* Biome colors */
+  --color-forest: #2d7a3e;
+  --color-desert: #c8853a;
+  --color-cyber: #00d4ff;
+  --color-snow: #a8d8f0;
+  --color-lava: #ff4500;
+
+  /* Pixel shadow */
+  --pixel-border: #1a1a3a;
+  --pixel-shadow: #06060f;
+  --pixel-highlight: #3a3a6a;
+
+  /* Animations */
+  --ease-pixel: steps(1);
+  --ease-bounce-pixel: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* ============================================================
+   BASE STYLES
+   ============================================================ */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--color-bg-deep);
+  color: #e2e8f0;
+  font-family: var(--font-body);
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+/* Pixel-perfect canvas and images */
+canvas.pixel-art,
+img.pixel-art {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--color-bg-dark); }
+::-webkit-scrollbar-thumb { background: var(--color-border-bright); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-neon-purple); }
+
+/* ============================================================
+   PIXEL ART UTILITY CLASSES
+   ============================================================ */
+.pixel-font {
+  font-family: var(--font-pixel);
+  image-rendering: pixelated;
+}
+
+.retro-font {
+  font-family: var(--font-retro);
+}
+
+/* 4-sided pixel border using box-shadow */
+.pixel-border {
+  box-shadow:
+    0 -2px 0 0 var(--pixel-border),
+    0 2px 0 0 var(--pixel-border),
+    -2px 0 0 0 var(--pixel-border),
+    2px 0 0 0 var(--pixel-border);
+}
+
+.pixel-border-glow {
+  box-shadow:
+    0 -2px 0 0 var(--color-neon-purple),
+    0 2px 0 0 var(--color-neon-purple),
+    -2px 0 0 0 var(--color-neon-purple),
+    2px 0 0 0 var(--color-neon-purple),
+    0 0 20px rgba(191, 95, 255, 0.4);
+}
+
+/* 3D press button effect */
+.pixel-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 80ms, box-shadow 80ms;
+  box-shadow: 0 4px 0 0 var(--pixel-shadow);
+  user-select: none;
+}
+
+.pixel-button:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 0 var(--pixel-shadow);
+}
+
+.pixel-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Neon glow text */
+.neon-text-green { color: var(--color-neon-green); text-shadow: 0 0 10px var(--color-neon-green), 0 0 20px var(--color-neon-green); }
+.neon-text-blue  { color: var(--color-neon-blue);  text-shadow: 0 0 10px var(--color-neon-blue),  0 0 20px var(--color-neon-blue); }
+.neon-text-purple{ color: var(--color-neon-purple); text-shadow: 0 0 10px var(--color-neon-purple), 0 0 20px var(--color-neon-purple); }
+.neon-text-yellow{ color: var(--color-neon-yellow); text-shadow: 0 0 10px var(--color-neon-yellow), 0 0 20px var(--color-neon-yellow); }
+
+/* Card with pixel scanline overlay */
+.pixel-card {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  position: relative;
+  overflow: hidden;
+}
+
+.pixel-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.04) 2px,
+    rgba(0, 0, 0, 0.04) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ============================================================
+   KEYFRAME ANIMATIONS
+   ============================================================ */
+
+/* Walking sprite — steps through 8 horizontal frames */
+@keyframes walk {
+  from { background-position: 0px 0px; }
+  to   { background-position: -256px 0px; }
+}
+
+/* Idle sprite — steps through 4 frames */
+@keyframes idle-sprite {
+  from { background-position: 0px 0px; }
+  to   { background-position: -128px 0px; }
+}
+
+/* Floating clouds (landing page) */
+@keyframes float-cloud {
+  0%   { transform: translateX(-20%); opacity: 0; }
+  10%  { opacity: 0.6; }
+  90%  { opacity: 0.6; }
+  100% { transform: translateX(120vw); opacity: 0; }
+}
+
+/* Torch flicker */
+@keyframes torch-flicker {
+  0%,100% { opacity: 1; transform: scale(1); }
+  25%     { opacity: 0.85; transform: scale(0.96) rotate(-1deg); }
+  50%     { opacity: 0.95; transform: scale(1.02) rotate(1deg); }
+  75%     { opacity: 0.8; transform: scale(0.98) rotate(-0.5deg); }
+}
+
+/* Water ripple on map */
+@keyframes water-ripple {
+  0%,100% { transform: scaleY(1); }
+  50%     { transform: scaleY(0.94); }
+}
+
+/* XP float up and fade */
+@keyframes xp-float-up {
+  0%   { transform: translateY(0) translateX(-50%); opacity: 1; }
+  100% { transform: translateY(-80px) translateX(-50%); opacity: 0; }
+}
+
+/* Pixel bounce */
+@keyframes pixel-bounce {
+  0%,100% { transform: translateY(0); }
+  50%     { transform: translateY(-8px); }
+}
+
+/* Pulse glow for streaks */
+@keyframes streak-pulse {
+  0%,100% { box-shadow: 0 0 8px var(--color-streak); }
+  50%     { box-shadow: 0 0 20px var(--color-streak), 0 0 40px rgba(255, 107, 53, 0.4); }
+}
+
+/* Shake for missed habit */
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  20%     { transform: translateX(-4px); }
+  40%     { transform: translateX(4px); }
+  60%     { transform: translateX(-4px); }
+  80%     { transform: translateX(4px); }
+}
+
+/* Spin (loading) */
+@keyframes pixel-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Level up burst */
+@keyframes level-up-burst {
+  0%   { transform: scale(0.5); opacity: 0; }
+  60%  { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Slide in from bottom */
+@keyframes slide-up {
+  from { transform: translateY(100%); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+/* Twinkle for stars */
+@keyframes twinkle {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50%     { opacity: 0.3; transform: scale(0.7); }
+}
+
+/* Horizontal scroll for world (landing hero) */
+@keyframes world-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* Blink cursor */
+@keyframes blink {
+  0%,100% { opacity: 1; }
+  50%     { opacity: 0; }
+}
+
+/* ============================================================
+   ANIMATION UTILITY CLASSES
+   ============================================================ */
+.animate-float-cloud   { animation: float-cloud 20s linear infinite; }
+.animate-torch         { animation: torch-flicker 1.5s ease-in-out infinite; }
+.animate-water         { animation: water-ripple 3s ease-in-out infinite; }
+.animate-bounce-pixel  { animation: pixel-bounce 1s steps(2) infinite; }
+.animate-streak-pulse  { animation: streak-pulse 2s ease-in-out infinite; }
+.animate-twinkle       { animation: twinkle 2s ease-in-out infinite; }
+.animate-world-scroll  { animation: world-scroll 30s linear infinite; }
+.animate-blink         { animation: blink 1s steps(1) infinite; }
+.animate-spin-pixel    { animation: pixel-spin 1s steps(8) infinite; }
+
+/* ============================================================
+   PROGRESS / XP BARS
+   ============================================================ */
+.xp-bar-track {
+  background: var(--color-bg-hover);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+  position: relative;
+}
+
+.xp-bar-fill {
+  background: linear-gradient(90deg, var(--color-xp-glow), var(--color-xp));
+  height: 100%;
+  transition: width 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+}
+
+.xp-bar-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255,255,255,0.3) 50%,
+    transparent 100%
+  );
+  animation: xp-shine 2s ease-in-out infinite;
+}
+
+@keyframes xp-shine {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+
+/* ============================================================
+   STREAK FLAME
+   ============================================================ */
+.streak-flame {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--color-streak);
+  filter: drop-shadow(0 0 6px var(--color-streak));
+}
+
+/* ============================================================
+   PIXEL AVATAR (CSS-drawn placeholder layers)
+   ============================================================ */
+.pixel-avatar {
+  image-rendering: pixelated;
+  display: block;
+}
+
+/* ============================================================
+   WORLD MAP (CSS-only terrain)
+   ============================================================ */
+.biome-forest { background: linear-gradient(180deg, #1a3a1a 0%, #2d7a3e 50%, #1a4a20 100%); }
+.biome-desert { background: linear-gradient(180deg, #6b4f1a 0%, #c8853a 50%, #8b5e20 100%); }
+.biome-cyber  { background: linear-gradient(180deg, #001a2e 0%, #003d5c 50%, #00d4ff22 100%); }
+.biome-snow   { background: linear-gradient(180deg, #c8e6f5 0%, #a8d8f0 50%, #7bb8d8 100%); }
+.biome-lava   { background: linear-gradient(180deg, #1a0500 0%, #5c1a00 50%, #ff450022 100%); }
+
+/* ============================================================
+   TOAST NOTIFICATIONS
+   ============================================================ */
+.toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+
+/* ============================================================
+   RESPONSIVE HELPERS
+   ============================================================ */
+@media (max-width: 768px) {
+  .pixel-font { font-size: 0.7em; }
+}
